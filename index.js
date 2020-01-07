@@ -4,10 +4,9 @@
 
 'use strict';
 
-import {NativeModules, NativeEventEmitter, DeviceEventEmitter} from 'react-native';
+import {NativeModules, DeviceEventEmitter} from 'react-native';
 
 const ForegroundServiceModule = NativeModules.VIForegroundService;
-const eventEmitter = new NativeEventEmitter(ForegroundServiceModule);
 var _notifHandlers = new Map();
 
 /**
