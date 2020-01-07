@@ -132,6 +132,11 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
                         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                         .emit("onDestroyed", params);
                 break;
+            case ON_FOREGROUND_SERVICE_DISPLAYED:
+                getReactApplicationContext()
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit("onForegroundServiceDisplayed", params);
+                break;
         }
     }
 }

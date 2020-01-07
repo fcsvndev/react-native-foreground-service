@@ -92,6 +92,24 @@ export default class VIForegroundService {
         _notifHandlers.set(handler, listener);
     }
 
+    static onForegroundServiceDisplayed(handler) {
+        const listener = DeviceEventEmitter.addListener(
+            'onForegroundServiceDisplayed',
+            (notifData) => {
+                handler(true);
+            }
+        );
+        _notifHandlers.set(handler, listener);
+    }
+
+    static removeEventListener(handler) {
+        const listener = _notifHandlers.get(handler)
+        if (listener) {
+            listener.remove()
+        }
+        _notifHandlers.remove(handler)
+    }
+
     static removeEventListeners() {
         for (const [key, value] of _notifHandlers) {
             value.remove();
@@ -104,3 +122,5 @@ export default class VIForegroundService {
         ForegroundServiceModule.showNotification(notificationConfig);
     }
 }
+
+

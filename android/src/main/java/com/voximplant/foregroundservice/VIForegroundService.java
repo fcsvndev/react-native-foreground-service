@@ -49,6 +49,9 @@ public class VIForegroundService extends Service {
                                 .buildNotification(getApplicationContext(), notificationConfig);
 
                         startForeground((int)notificationConfig.getDouble("id"), notification);
+                        Intent sendIntent = new Intent(Constants.FOREGROUND_SERVICE_RECEIVER);
+                        sendIntent.putExtra(Constants.LIFE_CYCLE_ACTION, LifecycleType.ON_FOREGROUND_SERVICE_DISPLAYED);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(sendIntent);
                     }
                 }
             } else if (action.equals(Constants.ACTION_FOREGROUND_SERVICE_STOP)) {
