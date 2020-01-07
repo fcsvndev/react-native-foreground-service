@@ -4,9 +4,11 @@
 
 'use strict';
 
-import { NativeModules } from 'react-native';
+import {NativeModules, NativeEventEmitter, DeviceEventEmitter} from 'react-native';
 
 const ForegroundServiceModule = NativeModules.VIForegroundService;
+const eventEmitter = new NativeEventEmitter(ForegroundServiceModule);
+var _notifHandlers = new Map();
 
 /**
  * @property {string} channelId - Notification channel id to display notification
@@ -69,6 +71,36 @@ export default class VIForegroundService {
     static async stopService() {
         return await ForegroundServiceModule.stopService();
     }
+
+    static onCreated(handler) {
+        const listener = DeviceEventEmitter.addListener(
+            'onCreated',
+            (notifData) => {
+                handler(true);
+            }
+        );
+        _notifHandlers.set(handler, listener);
+    }
+
+    static onDestroyed(handler) {
+        const listener = DeviceEventEmitter.addListener(
+            'onDestroyed',
+            (notifData) => {
+                handler(true);
+            }
+        );
+        _notifHandlers.set(handler, listener);
+    }
+
+    static removeEventListeners() {
+        for (const [key, value] of _notifHandlers) {
+            value.remove();
+        }
+
+        _notifHandlers.clear();
+    }
+
+    static showNotification(notificationConfig) {
+        ForegroundServiceModule.showNotification(notificationConfig);
+    }
 }
-
-
